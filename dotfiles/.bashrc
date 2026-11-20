@@ -41,3 +41,17 @@ else
     # Do not produce output here; it breaks rsync
     : echo "no ssh-agent"
 fi
+
+# Colors (interactive shells only)
+case $- in
+*i*)
+    __prompt_git_branch() {
+        local b
+        b=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null) && printf ' (%s)' "$b"
+    }
+    PS1='${AWS_PROFILE:+\[\e[1;33m\][$AWS_PROFILE]\[\e[0m\] }\[\e[1;32m\]\u@\h\[\e[0m\]:\[\e[1;34m\]\w\[\e[1;35m\]$(__prompt_git_branch)\[\e[0m\]\$ '
+    alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
+    alias diff='diff --color=auto'
+    ;;
+esac
